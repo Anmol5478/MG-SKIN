@@ -93,33 +93,34 @@ const Home = () => {
       </section>
 
       {/* 2. Statistics Section */}
-      <section className="py-12 px-6" style={{ backgroundColor: theme.secondary }}>
-        <div className="max-w-7xl mx-auto">
-          <motion.div 
-            className="grid grid-cols-3 gap-6"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-          >
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                className="bg-white p-6 rounded-xl text-center shadow-md"
-                whileHover={{ y: -5 }}
-              >
-                <div className="w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4"
-                  style={{ backgroundColor: `${stat.color}20`, color: stat.color }}>
-                  {stat.icon}
-                </div>
-                <h3 className="text-3xl font-bold mb-2" style={{ color: theme.dark }}>
-                  {stat.value}
-                </h3>
-                <p style={{ color: theme.dark }}>{stat.label}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
+      <section className="py-12 px-4 sm:px-6" style={{ backgroundColor: theme.secondary }}>
+  <div className="max-w-7xl mx-auto">
+    <motion.div 
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+    >
+      {stats.map((stat, index) => (
+        <motion.div
+          key={index}
+          className="bg-white p-4 sm:p-6 rounded-xl text-center shadow-md"
+          whileHover={{ y: -5 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto rounded-full flex items-center justify-center mb-3 sm:mb-4"
+            style={{ backgroundColor: `${stat.color}20`, color: stat.color }}>
+            {stat.icon}
+          </div>
+          <h3 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2" style={{ color: theme.dark }}>
+            {stat.value}
+          </h3>
+          <p className="text-sm sm:text-base" style={{ color: theme.dark }}>{stat.label}</p>
+        </motion.div>
+      ))}
+    </motion.div>
+  </div>
+</section>
 
       {/* 3. Services Section */}
       <section className="py-16 px-6 bg-white">
