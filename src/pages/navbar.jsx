@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, Phone, Calendar } from 'react-feather';
+import Logo from "../assets/Logo.jpeg"; // Import the logo image
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -13,8 +14,8 @@ const Navbar = () => {
   }, []);
 
   const theme = {
-    primary: '#5D8AA8',
-    secondary: '#88B4C7',
+    primary: '#347deb',
+    secondary: '#347deb',
     accent: '#FF6B6B',
     light: '#F8F9FA',
     dark: '#1F2937' // darker for better contrast
@@ -42,12 +43,14 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
-          <div className="w-9 h-9 rounded-full flex items-center justify-center bg-blue-600">
-            <span className="text-white font-bold text-lg">MG</span>
-          </div>
+          <img 
+            src={Logo} 
+            alt="MG Skin Rejuvenessence Logo" 
+            className="w-20 h-15 rounded-full" // Increased size from w-9 h-9 to w-12 h-12
+          />
           <span className="text-lg font-bold">
             <span style={{ color: theme.primary }}>MG</span>
-            <span style={{ color: theme.dark }}> Skin Rejuvenance</span>
+            <span style={{ color: theme.dark }}> Skin Rejuvenssence</span>
           </span>
         </Link>
 

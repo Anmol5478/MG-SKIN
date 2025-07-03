@@ -2,12 +2,11 @@ import { motion } from 'framer-motion';
 import { Phone, Calendar, ChevronRight, Star, MapPin, User, Smile, Activity } from 'react-feather';
 import Navbar from './navbar';
 import image from "../assets/Clinic.webp";
-
 const Home = () => {
   // Your existing color theme
   const theme = {
-    primary: '#5D8AA8',
-    secondary: '#88B4C7',
+    primary: '#347deb',
+    secondary: '#13854a',
     accent: '#FF6B6B',
     light: '#F8F9FA',
     dark: '#343A40'
