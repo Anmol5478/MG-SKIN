@@ -6,11 +6,11 @@ import Navbar from './navbar';
 const Contact = () => {
   // Color theme matching your brand
   const theme = {
-    primary: '#5D8AA8',
-    secondary: '#88B4C7',
+    primary: '#347deb',
+    secondary: '#347deb',
     accent: '#FF6B6B',
     light: '#F8F9FA',
-    dark: '#343A40'
+    dark: '#1F2937'
   };
 
   const [formData, setFormData] = useState({

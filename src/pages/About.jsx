@@ -5,11 +5,11 @@ import drMeghnaPhoto from '../assets/DII.jpg';
 
 const About = () => {
   const theme = {
-    primary: '#5D8AA8',
-    secondary: '#88B4C7',
+    primary: '#347deb',
+    secondary: '#347deb',
     accent: '#FF6B6B',
     light: '#F8F9FA',
-    dark: '#343A40'
+    dark: '#1F2937'
   };
 
   const journey = [
@@ -136,55 +136,49 @@ const About = () => {
           
           <div className="relative">
             {/* Timeline line */}
-            <div className="hidden lg:block absolute left-1/2 top-0 h-full w-0.5 transform -translate-x-1/2" 
-              style={{ backgroundColor: theme.secondary }}></div>
+            <div className="hidden lg:block absolute left-1/2 top-0 h-full w-1 transform -translate-x-1/2 bg-gradient-to-b from-primary to-secondary"></div>
             
             {journey.map((item, index) => (
               <motion.div
                 key={index}
-                className="relative mb-16 last:mb-0"
+                className={`relative mb-16 last:mb-0 flex flex-col lg:flex-row items-center ${
+                  index % 2 === 0 ? 'lg:items-start' : 'lg:items-end'
+                }`}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true, margin: "-100px" }}
               >
-                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-center">
-                  {/* Left side (for even indexes) */}
-                  <div className={`lg:w-2/5 ${index % 2 === 0 ? 'lg:pr-8 lg:text-right' : 'lg:pl-8 lg:order-2'}`}>
-                    <div className="inline-block">
-                      <div className="flex items-center lg:flex-col-reverse lg:items-end">
-                        <div className="hidden lg:block w-4 h-4 rounded-full bg-white border-4 z-10 mb-2"
-                          style={{ borderColor: theme.primary }}></div>
-                        <p className="text-lg font-semibold px-4 py-1 rounded-full lg:mb-2"
-                          style={{ backgroundColor: `${theme.primary}20`, color: theme.primary }}>
-                          {item.year}
-                        </p>
-                      </div>
-                    </div>
+                {/* Left side (for even indexes) */}
+                <div className={`lg:w-1/2 ${index % 2 === 0 ? 'lg:pr-8' : 'lg:pl-8 lg:order-2'}`}>
+                  <div className="inline-block text-center lg:text-right">
+                    <p className="text-lg font-semibold px-4 py-1 rounded-full mb-2"
+                      style={{ backgroundColor: `${theme.primary}20`, color: theme.primary }}>
+                      {item.year}
+                    </p>
                   </div>
+                </div>
 
-                  {/* Center dot (mobile) */}
-                  <div className="lg:hidden absolute left-1/2 transform -translate-x-1/2 -translate-y-4 w-4 h-4 rounded-full z-10"
-                    style={{ backgroundColor: theme.primary }}></div>
+                {/* Center dot (hidden on small screens) */}
+                <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 w-6 h-6 rounded-full bg-white border-4 z-10"
+                  style={{ borderColor: theme.primary }}></div>
 
-                  {/* Right side (for odd indexes) */}
-                  <div className={`lg:w-3/5 mt-4 lg:mt-0 ${index % 2 === 0 ? 'lg:pl-8' : 'lg:pr-8 lg:text-right lg:order-1'}`}>
-                    <div className={`p-6 rounded-xl shadow-md ${index % 2 === 0 ? 'lg:ml-auto' : 'lg:mr-auto'}`}
-                      style={{ 
-                        backgroundColor: 'white', 
-                        maxWidth: '500px',
-                        borderLeft: index % 2 === 0 ? 'none' : `4px solid ${theme.primary}`,
-                        borderRight: index % 2 === 0 ? `4px solid ${theme.primary}` : 'none'
-                      }}>
-                      <div className="flex items-start">
-                        <div className="p-3 rounded-full mr-4" style={{ backgroundColor: `${theme.primary}20` }}>
-                          {item.icon}
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-bold mb-1" style={{ color: theme.dark }}>{item.title}</h3>
-                          <p className="text-sm font-medium mb-2" style={{ color: theme.primary }}>{item.institution}</p>
-                          <p className="text-gray-600">{item.description}</p>
-                        </div>
+                {/* Right side (for odd indexes) */}
+                <div className={`lg:w-1/2 mt-4 lg:mt-0 ${index % 2 === 0 ? 'lg:pl-8' : 'lg:pr-8 lg:order-1'}`}>
+                  <div className="p-6 rounded-xl shadow-lg bg-gradient-to-r from-white to-gray-50 hover:shadow-xl transition-shadow"
+                    style={{ 
+                      maxWidth: '500px',
+                      borderLeft: index % 2 === 0 ? 'none' : `4px solid ${theme.primary}`,
+                      borderRight: index % 2 === 0 ? `4px solid ${theme.primary}` : 'none'
+                    }}>
+                    <div className="flex items-start">
+                      <div className="p-3 rounded-full mr-4" style={{ backgroundColor: `${theme.primary}20` }}>
+                        {item.icon}
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold mb-1" style={{ color: theme.dark }}>{item.title}</h3>
+                        <p className="text-sm font-medium mb-2" style={{ color: theme.primary }}>{item.institution}</p>
+                        <p className="text-gray-600">{item.description}</p>
                       </div>
                     </div>
                   </div>

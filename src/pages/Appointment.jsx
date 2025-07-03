@@ -6,11 +6,11 @@ import Navbar from './navbar';
 const Appointment = () => {
   // Color theme matching your brand
   const theme = {
-    primary: '#5D8AA8',
-    secondary: '#88B4C7',
+    primary: '#347deb',
+    secondary: '#347deb',
     accent: '#FF6B6B',
     light: '#F8F9FA',
-    dark: '#343A40'
+    dark: '#1F2937'
   };
 
   // Available services
@@ -359,6 +359,8 @@ const Appointment = () => {
                         +91 8448413128 <br />
                         mgskinghaziabad@gmail.com
                       </p>
+                      <br />
+                      <h3 className="font-medium mb-2" style={{ color: theme.dark }}>Consultation: <span style={{color: theme.primary}}>RS 500/-</span></h3> {/* Updated fee */}
                     </div>
                   </div>
                 </div>
