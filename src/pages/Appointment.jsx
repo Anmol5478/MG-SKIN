@@ -80,23 +80,31 @@ const Appointment = () => {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      // In a real app, you would send this data to your backend
-      console.log('Form submitted:', formData);
-      setIsSubmitted(true);
-      
-      // Reset form after submission
-      setFormData({
-        name: '',
-        phone: '',
-        email: '',
-        service: '',
-        date: '',
-        time: '',
-        message: ''
-      });
+      try {
+        const response = await fetch('http://localhost:5000/api/appointments', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+        if (response.ok) {
+          alert('Appointment booked successfully!');
+          setFormData({
+            name: '',
+            phone: '',
+            email: '',
+            service: '',
+            date: '',
+            time: '',
+            message: '',
+          });
+          setIsSubmitted(true);
+        }
+      } catch (error) {
+        console.error('Failed to book appointment:', error);
+      }
     }
   };
 

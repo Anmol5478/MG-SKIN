@@ -27,17 +27,21 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission (connect to backend)
-    console.log('Form submitted:', formData);
-    alert('Thank you for your message! We will contact you soon.');
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      message: ''
-    });
+    try {
+      const response = await fetch('http://localhost:5173/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (response.ok) {
+        alert('Message sent successfully!');
+        setFormData({ name: '', email: '', phone: '', message: '' });
+      }
+    } catch (error) {
+      console.error('Failed to send message:', error);
+    }
   };
 
   return (

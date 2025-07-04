@@ -18,7 +18,7 @@ const Reviews = () => {
       const data = await response.json();
       setReviews(data);
     } catch (error) {
-      console.error('Error fetching reviews:', error);
+      console.error('Failed to fetch reviews:', error);
     }
   };
 
@@ -28,14 +28,14 @@ const Reviews = () => {
       const response = await fetch('http://localhost:5000/api/reviews', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newReview)
+        body: JSON.stringify(newReview),
       });
       if (response.ok) {
         fetchReviews(); // Refresh reviews
         setNewReview({ name: '', rating: 0, comment: '' });
       }
     } catch (error) {
-      console.error('Error submitting review:', error);
+      console.error('Failed to submit review:', error);
     }
   };
 
@@ -64,13 +64,18 @@ const Reviews = () => {
               <label className="block mb-2">Rating</label>
               <div className="flex">
                 {[1, 2, 3, 4, 5].map((star) => (
-                  <Star
+                  <svg
                     key={star}
+                    onClick={() => setNewReview({ ...newReview, rating: star })}
+                    xmlns="http://www.w3.org/2000/svg"
                     fill={star <= newReview.rating ? 'gold' : 'none'}
-                    color="gold"
-                    onClick={() => setNewReview({...newReview, rating: star})}
-                    className="cursor-pointer mr-1"
-                  />
+                    stroke="gold"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                    className="cursor-pointer w-6 h-6 mr-1"
+                  >
+                    <path d="M12 .587l3.668 7.568L24 9.423l-6 5.847 1.417 8.253L12 18.897l-7.417 4.626L6 15.27 0 9.423l8.332-1.268z" />
+                  </svg>
                 ))}
               </div>
             </div>
