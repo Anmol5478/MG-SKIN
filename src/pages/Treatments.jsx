@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Activity, Eye, Shield, User, Heart, Scissors, Zap, ChevronRight, Phone, Calendar } from 'react-feather'; // Added Phone and Calendar
+import { Activity, Eye, Shield, User, Heart, Scissors, Zap, ChevronRight, Phone, Calendar, Clock } from 'react-feather';
 import Navbar from './navbar';
+import { getTreatmentPath, treatmentCategories } from '../data/treatments';
 
 const Treatments = () => {
   // Color theme matching your brand
@@ -13,48 +14,14 @@ const Treatments = () => {
     dark: '#1F2937'
   };
 
-  const treatmentCategories = [
-    {
-      title: "Acne Solutions",
-      icon: <Activity size={32} style={{ color: theme.primary }} />,
-      treatments: [
-        { name: "Acne Scar Reduction", duration: "60 mins" },
-        { name: "Chemical Peels for Acne", duration: "45 mins" },
-        { name: "Laser Therapy", duration: "30 mins" },
-        { name: "Medicated Facials", duration: "60 mins" }
-      ]
-    },
-    {
-      title: "Anti-Aging",
-      icon: <Eye size={32} style={{ color: theme.primary }} />,
-      treatments: [
-        { name: "Botox Injections", duration: "30 mins" },
-        { name: "Dermal Fillers", duration: "45 mins" },
-        { name: "RF Microneedling", duration: "60 mins" },
-        { name: "Thread Lift", duration: "90 mins" }
-      ]
-    },
-    {
-      title: "Laser Treatments",
-      icon: <Zap size={32} style={{ color: theme.primary }} />,
-      treatments: [
-        { name: "Laser Hair Removal", duration: "30 mins" },
-        { name: "Pigmentation Treatment", duration: "45 mins" },
-        { name: "Tattoo Removal", duration: "Varies" },
-        { name: "CO2 Fractional Laser", duration: "60 mins" }
-      ]
-    },
-    {
-      title: "Skin Rejuvenation",
-      icon: <Heart size={32} style={{ color: theme.primary }} />,
-      treatments: [
-        { name: "HydraFacial", duration: "60 mins" },
-        { name: "Microdermabrasion", duration: "45 mins" },
-        { name: "PRP Therapy", duration: "90 mins" },
-        { name: "Gold Facial", duration: "75 mins" }
-      ]
-    }
-  ];
+  const icons = {
+    "Medical Dermatology": <Shield size={32} style={{ color: theme.primary }} />,
+    "Cosmetic Dermatology": <User size={32} style={{ color: theme.primary }} />,
+    "Laser Treatments": <Zap size={32} style={{ color: theme.primary }} />,
+    "Skin Rejuvenation": <Heart size={32} style={{ color: theme.primary }} />,
+    "Anti-Aging Treatments": <Eye size={32} style={{ color: theme.primary }} />,
+    "Surgical Procedures": <Scissors size={32} style={{ color: theme.primary }} />
+  };
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: theme.light }}>
@@ -71,51 +38,67 @@ const Treatments = () => {
             Advanced <span style={{ color: theme.accent }}>Skin Treatments</span>
           </motion.h1>
           <p className="text-lg text-white max-w-3xl mx-auto">
-            Specialized dermatological procedures tailored to your skin needs
+            Detailed dermatology, laser, cosmetic, hair, and skin rejuvenation procedures tailored to your needs.
           </p>
         </div>
       </section>
 
-      {/* Treatments Grid */}
+      {/* Treatments Cards */}
       <section className="py-16 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="space-y-14">
             {treatmentCategories.map((category, index) => (
-              <motion.div
-                key={index}
-                className="bg-white rounded-xl shadow-md overflow-hidden"
+              <motion.section
+                key={category.title}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <div className="p-6">
-                  <div className="flex items-center mb-6">
-                    <div className="p-3 rounded-full mr-4" style={{ backgroundColor: `${theme.primary}20` }}>
-                      {category.icon}
-                    </div>
-                    <h2 className="text-xl font-bold" style={{ color: theme.dark }}>{category.title}</h2>
+                <div className="flex items-center mb-6">
+                  <div className="p-3 rounded-full mr-4" style={{ backgroundColor: `${theme.primary}20` }}>
+                    {icons[category.title] || <Activity size={32} style={{ color: theme.primary }} />}
                   </div>
-                  
-                  <div className="space-y-4">
-                    {category.treatments.map((treatment, i) => (
-                      <div key={i} className="flex justify-between items-center p-3 hover:bg-gray-50 rounded-lg">
-                        <div>
-                          <h3 className="font-medium" style={{ color: theme.dark }}>{treatment.name}</h3>
-                          <p className="text-sm" style={{ color: theme.secondary }}>{treatment.duration}</p>
-                        </div>
-                        <Link
-                          to="/appointment"
-                          className="flex items-center text-sm font-medium"
-                          style={{ color: theme.primary }}
-                        >
-                          Book <ChevronRight size={16} className="ml-1" />
-                        </Link>
-                      </div>
-                    ))}
+                  <div>
+                    <h2 className="text-2xl font-bold" style={{ color: theme.dark }}>{category.title}</h2>
+                    <p className="text-sm mt-1" style={{ color: theme.secondary }}>
+                      Choose a procedure to view full details, aftercare, and booking options.
+                    </p>
                   </div>
                 </div>
-              </motion.div>
+
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {category.treatments.map((treatment) => (
+                    <Link
+                      key={treatment.name}
+                      to={getTreatmentPath(treatment.name)}
+                      className="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg transition-all p-5 min-h-64 flex flex-col"
+                    >
+                      <div className="flex items-center justify-between gap-4 mb-4">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: `${theme.primary}12`, color: theme.primary }}>
+                          {category.title}
+                        </span>
+                        <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" style={{ color: theme.primary }} />
+                      </div>
+                      <h3 className="text-lg font-bold mb-3" style={{ color: theme.dark }}>
+                        {treatment.name}
+                      </h3>
+                      <p className="text-sm leading-6 mb-5 flex-1" style={{ color: theme.secondary }}>
+                        {treatment.bestFor}
+                      </p>
+                      <div className="flex items-center justify-between border-t border-gray-100 pt-4 text-sm">
+                        <span className="inline-flex items-center" style={{ color: theme.dark }}>
+                          <Clock size={15} className="mr-2" />
+                          {treatment.duration}
+                        </span>
+                        <span className="font-medium" style={{ color: theme.primary }}>
+                          View Details
+                        </span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </motion.section>
             ))}
           </div>
         </div>
@@ -132,7 +115,7 @@ const Treatments = () => {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <a 
-              href="tel:+911234567890"
+              href="tel:+918448413128"
               className="flex items-center justify-center px-8 py-3 rounded-full font-medium bg-white"
               style={{ color: theme.accent }}
             >

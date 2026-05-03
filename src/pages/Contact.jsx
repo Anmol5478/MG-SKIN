@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 import { MapPin, Phone, Mail, Clock, Send } from 'react-feather';
 import Navbar from './navbar';
+import { isSheetDbConfigured, submitToSheetDb } from '../lib/sheetDb';
 
 const Contact = () => {
   // Color theme matching your brand
@@ -19,6 +20,8 @@ const Contact = () => {
     phone: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState('');
 
   const handleChange = (e) => {
     setFormData({
@@ -29,18 +32,23 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setStatus('');
+    setIsSubmitting(true);
     try {
-      const response = await fetch('http://localhost:5173/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+      await submitToSheetDb('Contact', {
+        ...formData
       });
-      if (response.ok) {
-        alert('Message sent successfully!');
-        setFormData({ name: '', email: '', phone: '', message: '' });
-      }
+      setFormData({ name: '', email: '', phone: '', message: '' });
+      setStatus('Message sent successfully. The clinic will contact you shortly.');
     } catch (error) {
       console.error('Failed to send message:', error);
+      setStatus(
+        isSheetDbConfigured
+          ? 'Could not send your message right now. Please call the clinic or try again.'
+          : 'SheetDB is not connected yet. Add your SheetDB API URL in VITE_SHEETDB_API_URL.'
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -77,6 +85,11 @@ const Contact = () => {
             <h2 className="text-2xl font-bold mb-6" style={{ color: theme.dark }}>
               Send Us a Message
             </h2>
+            {!isSheetDbConfigured && (
+              <div className="mb-5 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+                SheetDB is not connected yet. Add your SheetDB API URL to.
+              </div>
+            )}
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label className="block text-sm font-medium mb-1" style={{ color: theme.dark }}>
@@ -136,13 +149,19 @@ const Contact = () => {
                   required
                 ></textarea>
               </div>
+              {status && (
+                <div className={`rounded-lg border p-3 text-sm ${status.startsWith('Message') ? 'border-green-200 bg-green-50 text-green-700' : 'border-red-200 bg-red-50 text-red-600'}`}>
+                  {status}
+                </div>
+              )}
               <button
                 type="submit"
-                className="flex items-center justify-center px-6 py-3 rounded-full font-medium text-white"
+                disabled={isSubmitting}
+                className="flex items-center justify-center px-6 py-3 rounded-full font-medium text-white disabled:opacity-70 disabled:cursor-not-allowed"
                 style={{ backgroundColor: theme.primary }}
               >
                 <Send size={18} className="mr-2" />
-                Send Message
+                {isSubmitting ? 'Sending...' : 'Send Message'}
               </button>
             </form>
           </motion.div>

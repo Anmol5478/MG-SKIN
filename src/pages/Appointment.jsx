@@ -1,9 +1,12 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Calendar, Clock, User, Phone, Mail, MapPin, ChevronLeft } from 'react-feather';
 import Navbar from './navbar';
+import { treatmentNames } from '../data/treatments';
+import { isSheetDbConfigured, submitToSheetDb } from '../lib/sheetDb';
 
 const Appointment = () => {
+  const [searchParams] = useSearchParams();
   // Color theme matching your brand
   const theme = {
     primary: '#347deb',
@@ -13,17 +16,7 @@ const Appointment = () => {
     dark: '#1F2937'
   };
 
-  // Available services
-  const services = [
-    "General Consultation",
-    "Acne Treatment",
-    "Anti-Aging Treatment",
-    "Chemical Peel",
-    "Laser Hair Removal",
-    "Botox/Fillers",
-    "PRP Therapy",
-    "Skin Rejuvenation"
-  ];
+  const services = ["General Consultation", ...treatmentNames];
 
   // Available time slots
   const timeSlots = [
@@ -36,7 +29,7 @@ const Appointment = () => {
     name: '',
     phone: '',
     email: '',
-    service: '',
+    service: searchParams.get('service') || '',
     date: '',
     time: '',
     message: ''
@@ -44,6 +37,8 @@ const Appointment = () => {
 
   const [errors, setErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   // Handle form input changes
   const handleChange = (e) => {
@@ -82,28 +77,32 @@ const Appointment = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitError('');
     if (validateForm()) {
+      setIsSubmitting(true);
       try {
-        const response = await fetch('http://localhost:5000/api/appointments', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
+        await submitToSheetDb('Appointments', {
+          ...formData
         });
-        if (response.ok) {
-          alert('Appointment booked successfully!');
-          setFormData({
-            name: '',
-            phone: '',
-            email: '',
-            service: '',
-            date: '',
-            time: '',
-            message: '',
-          });
-          setIsSubmitted(true);
-        }
+        setFormData({
+          name: '',
+          phone: '',
+          email: '',
+          service: '',
+          date: '',
+          time: '',
+          message: '',
+        });
+        setIsSubmitted(true);
       } catch (error) {
         console.error('Failed to book appointment:', error);
+        setSubmitError(
+          isSheetDbConfigured
+            ? 'Something went wrong while sending your request. Please call the clinic or try again.'
+            : 'SheetDB is not connected yet. Add your SheetDB API URL in VITE_SHEETDB_API_URL.'
+        );
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };
@@ -165,6 +164,12 @@ const Appointment = () => {
                 Personal Information
               </h2>
               
+              {!isSheetDbConfigured && (
+                <div className="mb-5 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+                  SheetDB is not connected yet. Add your SheetDB API URL to <strong>VITE_SHEETDB_API_URL</strong>.
+                </div>
+              )}
+
               <form onSubmit={handleSubmit}>
                 <div className="space-y-5">
                   {/* Name Field */}
@@ -312,14 +317,21 @@ const Appointment = () => {
                   </div>
 
                   {/* Submit Button */}
+                  {submitError && (
+                    <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600">
+                      {submitError}
+                    </div>
+                  )}
+
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="w-full py-3 px-6 rounded-full font-medium text-white flex items-center justify-center"
+                      disabled={isSubmitting}
+                      className="w-full py-3 px-6 rounded-full font-medium text-white flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed"
                       style={{ backgroundColor: theme.primary }}
                     >
                       <Calendar size={18} className="mr-2" />
-                      Confirm Appointment
+                      {isSubmitting ? 'Sending...' : 'Confirm Appointment'}
                     </button>
                   </div>
                 </div>
@@ -417,5 +429,3 @@ const Appointment = () => {
 };
 
 export default Appointment;
-
-

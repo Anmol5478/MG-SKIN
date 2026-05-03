@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Activity, Eye, Shield, User, Heart, Scissors, Zap, ChevronRight, Phone } from 'react-feather'; // Added ChevronRight and Phone
 import Navbar from './navbar';
+import { getTreatmentPath } from '../data/treatments';
 
 const Services = () => {
   // Color theme matching your brand
@@ -23,7 +24,7 @@ const Services = () => {
         "Psoriasis Management",
         "Eczema Treatment",
         "Skin Allergy Solutions",
-        "Fungal Infections",
+        "Fungal Infection Treatment",
         "Vitiligo Treatment",
         "Hair Loss Solutions"
       ]
@@ -32,7 +33,7 @@ const Services = () => {
       title: "Cosmetic Dermatology",
       icon: <User size={32} style={{ color: theme.primary }} />,
       services: [
-        "Botox & Fillers",
+        "Botox & Anti-Wrinkle Injections",
         "Chemical Peels",
         "Dermal Fillers",
         "Thread Lift",
@@ -68,7 +69,6 @@ const Services = () => {
       title: "Anti-Aging Treatments",
       icon: <Eye size={32} style={{ color: theme.primary }} />,
       services: [
-        "Anti-Wrinkle Injections",
         "Skin Tightening",
         "RF Microneedling",
         "Ultherapy",
@@ -134,7 +134,9 @@ const Services = () => {
                         <div className="flex-shrink-0 mt-1 mr-3" style={{ color: theme.primary }}>
                           •
                         </div>
-                        <p style={{ color: theme.dark }}>{service}</p>
+                        <Link to={getTreatmentPath(service)} className="hover:underline" style={{ color: theme.dark }}>
+                          {service}
+                        </Link>
                       </li>
                     ))}
                   </ul>

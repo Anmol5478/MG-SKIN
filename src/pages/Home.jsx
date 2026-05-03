@@ -252,12 +252,6 @@ const Home = () => {
   </div>
 </section>
 
-      {/* 6. Footer */}
-      <footer className="py-8 px-6" style={{ backgroundColor: theme.dark, color: 'white' }}>
-        <div className="max-w-7xl mx-auto text-center">
-          <p>© {new Date().getFullYear()} MG Skin Rejuvenance. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   );
 };
